@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -16,13 +15,13 @@ const userSchema = new mongoose.Schema({
         enum: ['client', 'admin'],
         default: 'client',
     },
-}, { timestamps: true });
-
-userSchema.pre('save', async function (next) {
-    if (this.isModified('password')) {
-        this.password = await bcrypt.hash(this.password, 12);
-    }
-    next();
 });
+
+// userSchema.pre('save', async function (next) {
+//     if (this.isModified('password')) {
+//         this.password = await bcrypt.hash(this.password, 12);
+//     }
+//     next();
+// });
 
 export default mongoose.model('User', userSchema);
