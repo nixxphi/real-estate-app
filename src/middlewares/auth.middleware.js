@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config/env.config.js';
+import { JWT_SECRET } from '../configs/env.config.js';
 import User from '../models/user.model.js';
 import { createError, ERROR_CODES } from '../utils/error.utils.js';
 

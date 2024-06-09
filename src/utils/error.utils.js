@@ -1,5 +1,3 @@
-// error.utils.js
-
 export const ERROR_CODES = {
 
     INVALID_INPUT: 'INVALID_INPUT',

@@ -1,10 +1,9 @@
-import ChangeRequest from '../models/changeRequest.model.js';
-import Property from '../models/property.model.js';
+import { getPendingChangeRequestsService, approveChangeRequestService } from '../services/changes.service.js';
 import { createError, ERROR_CODES } from '../utils/error.utils.js';
 
 export const getPendingChangeRequests = async (req, res, next) => {
     try {
-        const changeRequests = await ChangeRequest.find({ approved: false }).populate('property user');
+        const changeRequests = await getPendingChangeRequestsService();
         res.render('admin_approve', { changeRequests });
     } catch (error) {
         next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch change requests'));
@@ -13,25 +12,7 @@ export const getPendingChangeRequests = async (req, res, next) => {
 
 export const approveChangeRequest = async (req, res, next) => {
     try {
-        const { requestId, action } = req.body;
-        const changeRequest = await ChangeRequest.findById(requestId);
-
-        if (!changeRequest) {
-            throw createError(ERROR_CODES.NOT_FOUND, 'Change request not found');
-        }
-
-        if (action === 'approve') {
-            const property = await Property.findById(changeRequest.propertyId);
-            if (changeRequest.newAddress) property.address = changeRequest.newAddress;
-            if (changeRequest.newPrice) property.price = changeRequest.newPrice;
-            if (changeRequest.newDescription) property.description = changeRequest.newDescription;
-            await property.save();
-            changeRequest.approved = true;
-        } else if (action === 'reject') {
-            await changeRequest.delete();
-        }
-
-        await changeRequest.save();
+        await approveChangeRequestService(req.body.requestId, req.body.action, req.user.id);
         res.redirect('/admin/approve_changes');
     } catch (error) {
         next(error);

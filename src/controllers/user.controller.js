@@ -1,13 +1,9 @@
-import User from '../models/user.model.js';
-import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config/env.config.js';
-import bcrypt from 'bcryptjs';
+import { registerUser, loginUser } from '../services/user.service.js';
 import { createError, ERROR_CODES } from '../utils/error.utils.js';
 
 export const register = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        const user = await User.create({ email, password });
+        const user = await registerUser(req.body);
         res.status(201).json(user);
     } catch (error) {
         next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to register user'));
@@ -16,12 +12,7 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw createError(ERROR_CODES.UNAUTHORIZED, 'Invalid credentials');
-        }
-        const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+        const token = await loginUser(req.body);
         res.json({ token });
     } catch (error) {
         next(error);

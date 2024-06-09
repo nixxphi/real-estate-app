@@ -13,6 +13,18 @@ const propertySchema = new mongoose.Schema({
         type: String,
         enum: ['1 bedroom', '2 bedroom', '3 bedroom', '4 bedroom', 'duplex', 'bungalow', 'loft', 'beach house'],
     },
+    power: {
+        type: Boolean,
+        default: true,
+    },
+    water: {
+        type: Boolean,
+        default: true,
+    },
+    security: {
+        type: Boolean,
+        default: true,
+    }
 }, { timestamps: true });
 
 export default mongoose.model('Property', propertySchema);
