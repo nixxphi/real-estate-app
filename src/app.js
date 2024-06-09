@@ -20,8 +20,7 @@ app.use((err, req, res, next) => {
     res.status(err.code || ERROR_CODES.INTERNAL_ERROR).json({ error: err.message });
 });
 
-startDb();
-
 app.listen(PORT, () => {
+    startDb();
     console.log(`Server running on port ${PORT}`);
 });

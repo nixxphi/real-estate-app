@@ -11,7 +11,7 @@ import { createError, ERROR_CODES } from '../utils/error.utils.js';
 class PropertyController {
     async getAllProperties(req, res, next) {
         try {
-            const properties = await getAllPropertiesService();
+            const properties = getAllPropertiesService();
             res.render('index', { properties });
         } catch (error) {
             next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch properties'));
@@ -20,7 +20,7 @@ class PropertyController {
 
     async getPropertyById(req, res, next) {
         try {
-            const property = await getPropertyByIdService(req.params.id);
+            const property = getPropertyByIdService(req.params.id);
             if (!property) {
                 next(createError(ERROR_CODES.NOT_FOUND, 'Property not found'));
                 return;
@@ -33,7 +33,7 @@ class PropertyController {
 
     async createProperty(req, res, next) {
         try {
-            const property = await createPropertyService(req.body);
+            const property = createPropertyService(req.body);
             res.status(201).json(property);
         } catch (error) {
             next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to create property'));
@@ -42,7 +42,7 @@ class PropertyController {
 
     async updateProperty(req, res, next) {
         try {
-            const property = await updatePropertyService(req.params.id, req.body);
+            const property = updatePropertyService(req.params.id, req.body);
             if (!property) {
                 next(createError(ERROR_CODES.NOT_FOUND, 'Property not found'));
                 return;
@@ -55,7 +55,7 @@ class PropertyController {
 
     async deleteProperty(req, res, next) {
         try {
-            const property = await deletePropertyService(req.params.id);
+            const property = deletePropertyService(req.params.id);
             if (!property) {
                 next(createError(ERROR_CODES.NOT_FOUND, 'Property not found'));
                 return;
@@ -68,7 +68,7 @@ class PropertyController {
 
     async requestPropertyUpdate(req, res, next) {
         try {
-            await requestPropertyUpdateService(req.params.id, req.user.id, req.body);
+            requestPropertyUpdateService(req.params.id, req.user.id, req.body);
             res.redirect('/');
         } catch (error) {
             next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to create change request'));
