@@ -14,7 +14,7 @@ export const login = async (req, res, next) => {
     try {
         const token = loginUser(req.body);
         res.json({ token });
-        res.json({ token: JSON.parse(token) });
+        
     } catch (error) {
         next(error);
     }

@@ -26,21 +26,20 @@ export const registerUser = async (req, res, next) => {
     }
 };
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (req, res, next) => {
     try {
+        const { email, password } = req.body; 
         const user = await User.findOne({ email });
         if (!user) {
             return next(createError(ERROR_CODES.NOT_FOUND, 'User not found', 404));
         }
         console.log(2);
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
+        const passwordValid = await bcrypt.compare(password, user.password);
+        if (!passwordValid) {
             return next(createError(ERROR_CODES.INVALID_CREDENTIALS, 'Invalid password', 401));
         }
-
         const token = generateToken();
-        res.status(200).json({ token });
-        return token;
+        res.status(200).json({ token }); 
     } catch (error) {
         next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to login user', 500));
     }
