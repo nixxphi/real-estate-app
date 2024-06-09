@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import userRoutes from './user.route.js';
-import propertyRoutes from './property.route.js';
-import adminRoutes from './admin.route.js';
+import userRouter from './user.route.js';
+import propertyRouter from './property.route.js';
+import adminRouter from './admin.route.js';
 
 const mainRouter = Router();
 
-mainRouter.use('/users', userRoutes);
-mainRouter.use('/properties', propertyRoutes);
-mainRouter.use('/admin', adminRoutes);
+mainRouter.use('/users', userRouter);
+mainRouter.use('/properties', propertyRouter);
+mainRouter.use('/admin', adminRouter);
 
 export default mainRouter;

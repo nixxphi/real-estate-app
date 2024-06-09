@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', mainRouter);
+app.use('/api/v1', mainRouter);
 
 app.use((req, res, next) => {
     next(createError(ERROR_CODES.NOT_FOUND, 'Endpoint not found'));
