@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import { PORT } from './configs/env.config.js';
 import startDb from './configs/db.config.js'; 
 import mainRouter from './routes/main.route.js';  
@@ -7,8 +8,9 @@ import { createError, ERROR_CODES } from './utils/error.utils.js';
 const app = express();
 
 app.set('view engine', 'ejs');
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/v1', mainRouter);
 
