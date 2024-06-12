@@ -1,4 +1,4 @@
-import PropertyService from '../services/property.service.js';
+import PropertyService from '../services/property.service2.js';
 import { createError, ERROR_CODES } from '../utils/error.utils.js';
 
 class PropertyController {
@@ -22,7 +22,7 @@ class PropertyController {
         next(createError(ERROR_CODES.NOT_FOUND, 'Property not found'));
         return;
       }
-      res.render('edit_property', { property });
+      res.render('edit-property', { property });
     } catch (error) {
       next(error);
     }
@@ -39,7 +39,7 @@ class PropertyController {
   
   async updateProperty(req, res, next) {
     try {
-      const property = await this.propertyService.getById(req.params.id); 
+      const property = await this.propertyService.update(req.params.id, req.body); 
       if (!property) {
         throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
       }
@@ -69,7 +69,7 @@ class PropertyController {
   
   async requestPropertyUpdate(req, res, next) {
     try {
-      await this.propertyService.requestPropertyUpdate(req.params.id, req.user.id, req.body); 
+      await this.propertyService.requestPropertyUpdate(req.params.id, req.body); 
       res.status(200).json({ message: 'Change request submitted' });
     } catch (error) {
       next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to create change request'));
@@ -93,7 +93,6 @@ class PropertyController {
       next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to find or create property'));
     }
   }
-  
 }
 
 export default new PropertyController();
