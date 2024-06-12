@@ -3,10 +3,7 @@ import { JWT_SECRET } from '../configs/env.config.js';
 import User from '../models/user.model.js';
 import { createError, ERROR_CODES } from '../utils/error.utils.js';
 
-
 export const authenticate = (req, res, next) => {
-    const tok = req.headers.authorization;
-    console.log(tok);
     const token = req.headers.authorization?.split(' ')[1];
 
     if (!token) {

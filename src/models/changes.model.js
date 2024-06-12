@@ -11,13 +11,22 @@ const changeRequestSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    newAddress: String,
-    newPrice: Number,
-    newDescription: String,
+    updates: {
+        address: String,
+        price: Number,
+        description: String,
+        power: Boolean,
+        water: Boolean,
+        security: Boolean
+    },
     approved: {
         type: Boolean,
         default: false,
     },
+    comments: {
+        type: String,
+        default: ''
+    }
 }, { timestamps: true });
 
 export default mongoose.model('ChangeRequest', changeRequestSchema);

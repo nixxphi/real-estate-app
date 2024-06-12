@@ -38,9 +38,11 @@ class PropertyService {
 
     async getAll() {
         try {
-            return await Property.find();
+            console.log(2);
+            const data = await Property.find();
+            return data;
         } catch (error) {
-            throw createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch properties');
+            throw createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch properties 2');
         }
     }
 

@@ -10,5 +10,7 @@ propertyRouter.post('/request-property-update/:id', propertyController.requestPr
 propertyRouter.post('/create-property', authenticate, propertyController.createProperty);
 propertyRouter.patch('/:id', authenticate, propertyController.updateProperty);
 propertyRouter.delete('/:id', authenticate, propertyController.deleteProperty);
+propertyRouter.get('/search', propertyController.searchProperties);
+propertyRouter.post('/find-one-or-create', propertyController.findOneOrCreateProperty);
 
 export default propertyRouter;

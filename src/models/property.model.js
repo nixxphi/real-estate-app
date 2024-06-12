@@ -28,7 +28,8 @@ const propertySchema = new mongoose.Schema({
     pendingUpdates: {
         type: mongoose.Schema.Types.Mixed,
         default: {}
-      }
+    }
 }, { timestamps: true });
 
-export default mongoose.model('Property', propertySchema);
+const Property = mongoose.model('Property', propertySchema);
+export default Property;

@@ -1,15 +1,12 @@
-import PropertyService from '../services/property.service2.js';
+import propertyService from '../services/property.service2.js';
 import { createError, ERROR_CODES } from '../utils/error.utils.js';
 
 class PropertyController {
-  constructor() {
-    this.propertyService = PropertyService;
-  }
-
   async getAllProperties(req, res, next) {
     try {
-      const properties = await this.propertyService.getAll();
-      return res.render('index', { properties });
+
+      const properties = await propertyService.getAll();
+      res.json(properties);
     } catch (error) {
       next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch properties'));
     }
@@ -17,12 +14,12 @@ class PropertyController {
   
   async getPropertyById(req, res, next) {
     try {
-      const property = await this.propertyService.getById(req.params.id);
+      const property = await propertyService.getById(req.params.id);
       if (!property) {
         next(createError(ERROR_CODES.NOT_FOUND, 'Property not found'));
         return;
       }
-      res.render('edit-property', { property });
+      res.status(200).json(property);
     } catch (error) {
       next(error);
     }
@@ -30,7 +27,7 @@ class PropertyController {
   
   async createProperty(req, res, next) {
     try {
-      const property = await this.propertyService.create(req.body); 
+      const property = await propertyService.create(req.body); 
       res.status(201).json(property);
     } catch (error) {
       next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to create property'));
@@ -39,7 +36,7 @@ class PropertyController {
   
   async updateProperty(req, res, next) {
     try {
-      const property = await this.propertyService.update(req.params.id, req.body); 
+      const property = await propertyService.update(req.params.id, req.body); 
       if (!property) {
         throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
       }
@@ -56,7 +53,7 @@ class PropertyController {
   
   async deleteProperty(req, res, next) {
     try {
-      const property = await this.propertyService.delete(req.params.id); 
+      const property = await propertyService.delete(req.params.id); 
       if (!property) {
         next(createError(ERROR_CODES.NOT_FOUND, 'Property not found'));
         return;
@@ -69,7 +66,7 @@ class PropertyController {
   
   async requestPropertyUpdate(req, res, next) {
     try {
-      await this.propertyService.requestPropertyUpdate(req.params.id, req.body); 
+      await propertyService.requestPropertyUpdate(req.params.id, req.body); 
       res.status(200).json({ message: 'Change request submitted' });
     } catch (error) {
       next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to create change request'));
@@ -78,7 +75,7 @@ class PropertyController {
   
   async searchProperties(req, res, next) {
     try {
-      const results = await this.propertyService.search(req.query); 
+      const results = await propertyService.search(req.query); 
       res.json(results);
     } catch (error) {
       next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to search properties'));
@@ -87,7 +84,7 @@ class PropertyController {
   
   async findOneOrCreateProperty(req, res, next) {
     try {
-      const property = await this.propertyService.findOneOrCreate(req.query, req.body); 
+      const property = await propertyService.findOneOrCreate(req.query, req.body); 
       res.json(property);
     } catch (error) {
       next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to find or create property'));

@@ -18,19 +18,17 @@ class UserController {
     try {
       const { email, password } = req.body;
       const token = await UserService.loginUser(email, password);
-      console.log("Login successful");
       res.json({ message: 'Login successful', token });
+      console.log(email);
     } catch (error) {
       console.error('Error during user login:', error);
       next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to login user', 500));
     }
   }
 
-  // Additional CRUD methods using GenericService:
-
   async getAllUsers(req, res, next) {
     try {
-      const users = await UserService.getAll(); // Use GenericService.getAll()
+      const users = await UserService.getAll(); 
       res.json(users);
     } catch (error) {
       console.error('Error fetching all users:', error);
@@ -56,7 +54,7 @@ class UserController {
     try {
       const { id } = req.params;
       const updateData = req.body;
-      const user = await UserService.update({ _id: id }, updateData); // Use GenericService.update()
+      const user = await UserService.update({ _id: id }, updateData); 
       if (!user) {
         throw createError(ERROR_CODES.NOT_FOUND, 'User not found', 404);
       }
@@ -70,7 +68,7 @@ class UserController {
   async deleteUser(req, res, next) {
     try {
       const { id } = req.params;
-      const user = await UserService.delete({ _id: id }); // Use GenericService.delete()
+      const user = await UserService.delete({ _id: id });
       if (!user) {
         throw createError(ERROR_CODES.NOT_FOUND, 'User not found', 404);
       }
