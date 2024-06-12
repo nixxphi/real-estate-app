@@ -3,8 +3,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../configs/env.config.js';
 import { createError, ERROR_CODES } from '../utils/error.utils.js';
+import GenericService from './generic.service.js';
 
-class UserService {
+class UserService extends GenericService {
+  constructor() {
+    super(User); 
+  }
+
   async registerUser(email, password, role) {
     if (!email || !password) {
       throw createError(ERROR_CODES.INVALID_INPUT, 'Email and password are required', 400);
@@ -33,6 +38,10 @@ class UserService {
   }
 
   async loginUser(email, password) {
+    if (!email || !password) {
+      throw createError(ERROR_CODES.INVALID_INPUT, 'Email and password are required', 400);
+    }
+
     try {
       const user = await User.findOne({ email });
       if (!user) {

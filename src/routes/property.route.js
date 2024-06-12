@@ -4,13 +4,11 @@ import { authenticate } from '../middlewares/auth.middleware.js';
 
 const propertyRouter = Router();
 
-propertyRouter.get('/properties', propertyController.getAllProperties);
+propertyRouter.get('/', propertyController.getAllProperties);
 propertyRouter.get('/edit-property/:id', authenticate, propertyController.getPropertyById);
-propertyRouter.post('/edit-property/:id', authenticate, propertyController.requestPropertyUpdate);
+propertyRouter.post('/request-property-update/:id', propertyController.requestPropertyUpdate);
 propertyRouter.post('/create-property', authenticate, propertyController.createProperty);
-propertyRouter.put('/:id', authenticate, propertyController.updateProperty);
+propertyRouter.patch('/:id', authenticate, propertyController.updateProperty);
 propertyRouter.delete('/:id', authenticate, propertyController.deleteProperty);
-propertyRouter.post('/edit-property/:id', authenticate, propertyController.requestPropertyUpdate);
-
 
 export default propertyRouter;

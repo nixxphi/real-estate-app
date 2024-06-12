@@ -12,8 +12,11 @@ export const ERROR_CODES = {
     VALIDATION_ERROR: 400,
 };
 
-export const createError = (status, message) => {
+export const createError = (statusCode, message) => {
+    if (!Object.values(ERROR_CODES).includes(statusCode)) {
+        statusCode = ERROR_CODES.INTERNAL_ERROR; 
+    }
     const error = new Error(message);
-    error.status = status;
+    error.statusCode = statusCode;
     return error;
 };

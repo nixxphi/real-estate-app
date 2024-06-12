@@ -24,7 +24,11 @@ const propertySchema = new mongoose.Schema({
     security: {
         type: Boolean,
         default: true,
-    }
+    },
+    pendingUpdates: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
+      }
 }, { timestamps: true });
 
 export default mongoose.model('Property', propertySchema);

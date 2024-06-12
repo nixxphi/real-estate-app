@@ -10,10 +10,13 @@ export const getPendingChangeRequests = async (req, res, next) => {
     }
 };
 
-export const approveChangeRequest = async (req, res, next) => {
+export const approveChangeRequest = async (req, res) => {
     try {
-        await approveChangeRequestService(req.body.requestId, req.body.action, req.user.id);
-        res.redirect('/admin/approve_changes');
+      const requestId = req.params.id;
+      const action = req.body.action;
+      const userId = req.user.id;
+      const result = await approveChangeRequestService(requestId, action, userId);
+      res.json(result);
     } catch (error) {
         next(error);
     }

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { MONGODB_URI, DB_NAME as dbName } from './env.config.js';
+import { MONGODB_URI as uri, DB_NAME as dbName } from './env.config.js';
 import { createError, ERROR_CODES } from '../utils/error.utils.js';
 
 let isConnecting = false;
@@ -10,7 +10,7 @@ export default () => {
   isConnecting = true;
 
   try {
-   mongoose.connect(MONGODB_URI, { dbName });
+   mongoose.connect(uri, { dbName });
    console.log('Database connection successful');
    isConnecting = false;
   } catch (err) {
