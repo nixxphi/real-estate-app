@@ -1,7 +1,7 @@
-import { createError, ERROR_CODES } from '../utils/error.utils.js';
+import { createHttpError, ERROR_CODES } from '../utils/error.utils.js';
 
-export const notFoundHandler = (req, res, next) => {
-    next(createError(ERROR_CODES.NOT_FOUND, 'Endpoint not found'));
+export const notFoundHandler = (req, res) => {
+    res.status(ERROR_CODES.NOT_FOUND).json({ error: 'Endpoint not found' });
 };
 
 export const errorHandler = (err, req, res, next) => {

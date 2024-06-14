@@ -1,5 +1,5 @@
 import changeRequestsService from '../services/changes.service.js';
-import { createError, ERROR_CODES } from '../utils/error.utils.js';
+import { createHttpError, ERROR_CODES } from '../utils/error.utils.js';
 
 class ChangeRequestsController {
     async getPendingChangeRequests(req, res, next) {
@@ -7,7 +7,7 @@ class ChangeRequestsController {
             const changeRequests = await changeRequestsService.getPendingChangeRequestsService();
             res.json(changeRequests);
         } catch (error) {
-            next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch change requests'));
+            next(createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch change requests'));
         }
     }
 
@@ -18,7 +18,7 @@ class ChangeRequestsController {
             const userId = req.user.id;
 
             if (changes.includes('newAddress')) {
-                return next(createError(ERROR_CODES.FORBIDDEN, 'Address changes are not allowed', 403));
+                return next(createHttpError(ERROR_CODES.FORBIDDEN, 'Address changes are not allowed', 403));
             }
 
             const result = await changeRequestsService.approveChangeRequest(requestId, action, userId, changes, comment);
@@ -34,7 +34,7 @@ class ChangeRequestsController {
             const userId = req.user.id;
 
             if (changes.includes('newAddress')) {
-                return next(createError(ERROR_CODES.FORBIDDEN, 'Address changes are not allowed', 403));
+                return next(createHttpError(ERROR_CODES.FORBIDDEN, 'Address changes are not allowed', 403));
             }
 
             const results = await changeRequestsService.bulkApproveChangeRequests(requestIds, action, userId, changes, comment);

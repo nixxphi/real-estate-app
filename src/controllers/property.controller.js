@@ -1,5 +1,5 @@
 import propertyService from '../services/property.service2.js';
-import { createError, ERROR_CODES } from '../utils/error.utils.js';
+import { createHttpError, ERROR_CODES } from '../utils/error.utils.js';
 
 class PropertyController {
   async getAllProperties(req, res, next) {
@@ -8,7 +8,7 @@ class PropertyController {
       const properties = await propertyService.getAll();
       res.json(properties);
     } catch (error) {
-      next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch properties'));
+      next(createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch properties'));
     }
   }
   
@@ -16,7 +16,7 @@ class PropertyController {
     try {
       const property = await propertyService.getById(req.params.id);
       if (!property) {
-        next(createError(ERROR_CODES.NOT_FOUND, 'Property not found'));
+        next(createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found'));
         return;
       }
       res.status(200).json(property);
@@ -30,7 +30,7 @@ class PropertyController {
       const property = await propertyService.create(req.body); 
       res.status(201).json(property);
     } catch (error) {
-      next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to create property'));
+      next(createHttpError(ERROR_CODES.INVALID_INPUT, 'Failed to create property'));
     }
   }
   
@@ -38,7 +38,7 @@ class PropertyController {
     try {
       const property = await propertyService.update(req.params.id, req.body); 
       if (!property) {
-        throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
+        throw createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
       }
       if (!property.pendingUpdates || Object.keys(property.pendingUpdates).length === 0) {
         return res.status(200).json({ message: 'There are no pending changes right now' });
@@ -55,12 +55,12 @@ class PropertyController {
     try {
       const property = await propertyService.delete(req.params.id); 
       if (!property) {
-        next(createError(ERROR_CODES.NOT_FOUND, 'Property not found'));
+        next(createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found'));
         return;
       }
       res.json(property);
     } catch (error) {
-      next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to delete property'));
+      next(createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to delete property'));
     }
   }
   
@@ -69,7 +69,7 @@ class PropertyController {
       await propertyService.requestPropertyUpdate(req.params.id, req.body); 
       res.status(200).json({ message: 'Change request submitted' });
     } catch (error) {
-      next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to create change request'));
+      next(createHttpError(ERROR_CODES.INVALID_INPUT, 'Failed to create change request'));
     }
   }
   
@@ -78,7 +78,7 @@ class PropertyController {
       const results = await propertyService.search(req.query); 
       res.json(results);
     } catch (error) {
-      next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to search properties'));
+      next(createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to search properties'));
     }
   }
   
@@ -87,7 +87,7 @@ class PropertyController {
       const property = await propertyService.findOneOrCreate(req.query, req.body); 
       res.json(property);
     } catch (error) {
-      next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to find or create property'));
+      next(createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to find or create property'));
     }
   }
 }

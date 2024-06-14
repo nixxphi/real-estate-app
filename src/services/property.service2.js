@@ -1,5 +1,5 @@
 import Property from '../models/property.model.js';
-import { createError, ERROR_CODES } from '../utils/error.utils.js';
+import { createHttpError, ERROR_CODES } from '../utils/error.utils.js';
 
 class PropertyService {
     async create(data) {
@@ -8,7 +8,7 @@ class PropertyService {
             await property.save();
             return property;
         } catch (error) {
-            throw createError(ERROR_CODES.INVALID_INPUT, 'Failed to create property');
+            throw createHttpError(ERROR_CODES.INVALID_INPUT, 'Failed to create property');
         }
     }
 
@@ -16,11 +16,11 @@ class PropertyService {
         try {
             const property = await Property.findByIdAndUpdate(propertyId, data, { new: true });
             if (!property) {
-                throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
+                throw createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
             }
             return property;
         } catch (error) {
-            throw createError(ERROR_CODES.INVALID_INPUT, 'Failed to update property');
+            throw createHttpError(ERROR_CODES.INVALID_INPUT, 'Failed to update property');
         }
     }
 
@@ -28,11 +28,11 @@ class PropertyService {
         try {
             const property = await Property.findByIdAndDelete(propertyId);
             if (!property) {
-                throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
+                throw createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
             }
             return property;
         } catch (error) {
-            throw createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to delete property');
+            throw createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to delete property');
         }
     }
 
@@ -42,7 +42,7 @@ class PropertyService {
             const data = await Property.find();
             return data;
         } catch (error) {
-            throw createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch properties 2');
+            throw createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch properties 2');
         }
     }
 
@@ -50,11 +50,11 @@ class PropertyService {
         try {
             const property = await Property.findById(propertyId);
             if (!property) {
-                throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
+                throw createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
             }
             return property;
         } catch (error) {
-            throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
+            throw createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
         }
     }
 
@@ -62,13 +62,13 @@ class PropertyService {
         try {
             const property = await Property.findById(propertyId);
             if (!property) {
-                throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
+                throw createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
             }
             property.pendingUpdates = updateData;
             await property.save();
             return property;
         } catch (error) {
-            throw createError(ERROR_CODES.INVALID_INPUT, 'Failed to request property update', 400, { propertyId, updateData });
+            throw createHttpError(ERROR_CODES.INVALID_INPUT, 'Failed to request property update', 400, { propertyId, updateData });
         }
     }
 
@@ -76,7 +76,7 @@ class PropertyService {
         try {
             const property = await Property.findById(propertyId);
             if (!property) {
-                throw createError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
+                throw createHttpError(ERROR_CODES.NOT_FOUND, 'Property not found', 404);
             }
             if (!property.pendingUpdates || Object.keys(property.pendingUpdates).length === 0) {
                 return { message: 'There are no pending changes right now' };
@@ -86,7 +86,7 @@ class PropertyService {
             await property.save();
             return { message: 'Changes approved successfully' };
         } catch (error) {
-            throw createError(ERROR_CODES.INVALID_INPUT, 'Failed to approve changes', 400, { propertyId });
+            throw createHttpError(ERROR_CODES.INVALID_INPUT, 'Failed to approve changes', 400, { propertyId });
         }
     }
 

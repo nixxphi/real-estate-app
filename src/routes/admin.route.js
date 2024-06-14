@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import requestController from '../controllers/admin.controller.js';
-import { authenticate, authorizeAdmin } from '../middlewares/auth.middleware.js'; 
+import authorize from '../middlewares/auth.middleware.js'; 
 
 const adminRouter = Router();
 
 
-adminRouter.use(authenticate);
-adminRouter.use(authorizeAdmin);
+adminRouter.use(authorize.authenticate);
+adminRouter.use(authorize.authorizeAdmin);
 
 
 adminRouter.get('/get-changes', requestController.getPendingChangeRequests);

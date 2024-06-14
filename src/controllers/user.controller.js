@@ -1,5 +1,5 @@
 import UserService from '../services/user.service.js';
-import { createError, ERROR_CODES } from '../utils/error.utils.js';
+import { createHttpError, ERROR_CODES } from '../utils/error.utils.js';
 
 class UserController {
   async register(req, res, next) {
@@ -10,7 +10,7 @@ class UserController {
       res.status(201).json({ message: 'User registered successfully', user });
     } catch (error) {
       console.error('Error during user registration:', error);
-      next(createError(ERROR_CODES.INVALID_INPUT, 'Failed to register user', 500));
+      next(createHttpError(ERROR_CODES.INVALID_INPUT, 'Failed to register user', 500));
     }
   }
 
@@ -22,7 +22,7 @@ class UserController {
       console.log(email);
     } catch (error) {
       console.error('Error during user login:', error);
-      next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to login user', 500));
+      next(createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to login user', 500));
     }
   }
 
@@ -32,7 +32,7 @@ class UserController {
       res.json(users);
     } catch (error) {
       console.error('Error fetching all users:', error);
-      next(createError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch users', 500));
+      next(createHttpError(ERROR_CODES.INTERNAL_ERROR, 'Failed to fetch users', 500));
     }
   }
 
@@ -41,7 +41,7 @@ class UserController {
       const { id } = req.params;
       const user = await UserService.findById(id); 
       if (!user) {
-        throw createError(ERROR_CODES.NOT_FOUND, 'User not found', 404);
+        throw createHttpError(ERROR_CODES.NOT_FOUND, 'User not found', 404);
       }
       res.json(user);
     } catch (error) {
@@ -56,7 +56,7 @@ class UserController {
       const updateData = req.body;
       const user = await UserService.update({ _id: id }, updateData); 
       if (!user) {
-        throw createError(ERROR_CODES.NOT_FOUND, 'User not found', 404);
+        throw createHttpError(ERROR_CODES.NOT_FOUND, 'User not found', 404);
       }
       res.json({ message: 'User updated successfully', user });
     } catch (error) {
@@ -70,7 +70,7 @@ class UserController {
       const { id } = req.params;
       const user = await UserService.delete({ _id: id });
       if (!user) {
-        throw createError(ERROR_CODES.NOT_FOUND, 'User not found', 404);
+        throw createHttpError(ERROR_CODES.NOT_FOUND, 'User not found', 404);
       }
       res.json({ message: 'User deleted successfully' });
     } catch (error) {

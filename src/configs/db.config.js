@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { MONGODB_URI as uri, DB_NAME as dbName } from './env.config.js';
-import { createError, ERROR_CODES } from '../utils/error.utils.js';
+import { createHttpError, ERROR_CODES } from '../utils/error.utils.js';
 
 let isConnecting = false;
 
@@ -15,7 +15,7 @@ export default () => {
    isConnecting = false;
   } catch (err) {
    console.error(err);
-   throw createError(ERROR_CODES.DATABASE_ERROR, 'There was an error connecting to database');
+   throw createHttpError(ERROR_CODES.DATABASE_ERROR, 'There was an error connecting to database');
   } finally {
    isConnecting = false;
   }
